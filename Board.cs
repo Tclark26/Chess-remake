@@ -21,34 +21,65 @@ public class Board : MonoBehaviour
 
     public void Create()
     {
+        #region Create
         for (int y = 0; y < 8; y++)
         {
             for (int x = 0; x < 8; x++)
             {
+                //Create the cell
                 GameObject newCell = Instantiate(mCellPrefab, transform);
 
+                //Position
                 RectTransform rectTransform = newCell.GetComponent<RectTransform>();
                 rectTransform.anchoredPosition = new Vector2((x * 100) + 50, (y * 100) + 50);
 
+                //Setup
                 mAllCells[x, y] = newCell.GetComponent<Cell>();
                 mAllCells[x, y].Setup(new Vector2Int(x, y), this);
             }
         }
+        #endregion
 
-        for (int x = 0; x < 8; x += 2)
+        #region Color
         {
-            for (int y = 0; y < 8; y++)
+            for (int x = 0; x < 8; x += 2)
             {
-                int offset = (y % 2 != 0) ? 0 : 1;
-                int finalX = x + offset;
+                for (int y = 0; y < 8; y++)
+                {
+                    // Offset for every other line
+                    int offset = (y % 2 != 0) ? 0 : 1;
+                    int finalX = x + offset;
 
-                mAllCells[finalX, y].GetComponent<Image>().color = new Color32(230, 220, 187, 255);
+                    mAllCells[finalX, y].GetComponent<Image>().color = new Color32(230, 220, 187, 255);
+                }
             }
         }
+        #endregion
     }
 
     public CellState ValidateCell(int targetX, int targetY, BasePiece checkingPiece)
     {
+        //Bounds check
+        if (targetX < 0 || targetX > 7)
+            return CellState.OutOfBounds;
+
+        if (targetY < 0 || targetY > 7)
+            return CellState.OutOfBounds;
+
+        //Get Cell
+        Cell targetCell = mAllCells[targetX, targetY];
+
+        //If the cell has a piece
+        if (targetCell.mCurrentPiece != null)
+        {
+            //If friendly
+            if (checkingPiece.mColor == targetCell.mCurrentPiece.mColor)
+                return CellState.Friendly;
+
+            //If enemy
+            if (checkingPiece.mColor != targetCell.mCurrentPiece.mColor)
+                return CellState.Enemy;
+        }
         return CellState.Free;
     }
 }
