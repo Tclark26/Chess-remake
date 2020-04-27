@@ -1,19 +1,19 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 public class Cell : MonoBehaviour
 {
-    public Image mOutlineImage;
+    public UnityEngine.UI.Image mOutlineImage;
 
     [HideInInspector]
     public Vector2Int mBoardPosition = Vector2Int.zero;
+    internal BasePiece mCurrentPiece;
     [HideInInspector]
     public Board mBoard = null;
     [HideInInspector]
     public RectTransform mRectTransform = null;
-
-    [HideInInspector]
-    public BasePiece mCurrentPiece = null;
 
     public void Setup(Vector2Int newBoardPosition, Board newBoard)
     {
@@ -22,7 +22,7 @@ public class Cell : MonoBehaviour
 
         mRectTransform = GetComponent<RectTransform>();
     }
-
+    // Start is called before the first frame update
     public void RemovePiece()
     {
         if (mCurrentPiece != null)
@@ -30,4 +30,6 @@ public class Cell : MonoBehaviour
             mCurrentPiece.Kill();
         }
     }
+
+    
 }

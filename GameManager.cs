@@ -1,17 +1,22 @@
-﻿using UnityEngine;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public Board mBoard;
 
     public PieceManager mPieceManager;
-
     void Start()
     {
-        //Create the bpard
         mBoard.Create();
 
-        mPieceManager.Setp(mBoard);
+        mPieceManager.Setup(mBoard);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }
